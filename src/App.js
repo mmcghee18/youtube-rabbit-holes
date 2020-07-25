@@ -1,45 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
-import _ from "lodash";
-import { Menu, Dropdown } from "antd";
-import { DownOutlined } from "@ant-design/icons";
-import report from "./data/report.json";
-import Report from "./Report.jsx";
+import * as d3 from "d3";
+import { initiateForce } from "./data-vis/forceLayout.js";
+import useChartDimensions from "./hooks/useChartDimensions.js";
 
 function App() {
-  const startYear = 2014;
-  const endYear = 2020;
+  const [ref, dms] = useChartDimensions({});
 
-  const [year, setYear] = useState("overall");
+  const [nodes, setNodes] = useState(null);
+
+  useEffect(() => {
+    setNodes(generateData());
+  }, []);
+
+  const generateData = () => {
+    const numNodes = 100;
+    const nodes = d3.range(numNodes).map((d) => {
+      return {
+        id: Math.floor(Math.random() * 10000),
+        radius: Math.random() * 25,
+        category: Math.floor(Math.random() * 3),
+      };
+    });
+    return nodes;
+  };
+
+  useEffect(() => {
+    if (nodes !== null && nodes.length) {
+      initiateForce({
+        nodes,
+        width: dms.boundedWidth,
+        height: dms.boundedHeight,
+      });
+    }
+  }, [dms]);
 
   return (
     <div className="App">
-      <AntDropDown startYear={startYear} endYear={endYear} setYear={setYear} />
-      <Report year={year} data={report[year]} />
+      <div id="wrapper" ref={ref} style={{ height: "90vh" }}>
+        <svg height={dms.boundedHeight} width={dms.boundedWidth} />
+      </div>
+      <button onClick={() => setNodes(generateData())}>new data</button>
     </div>
   );
 }
-
-const AntDropDown = ({ startYear, endYear, setYear }) => {
-  const menu = (
-    <Menu>
-      {_.range(startYear, endYear + 1).map((year) => (
-        <Menu.Item>
-          <div onClick={() => setYear(year)}>{year}</div>
-        </Menu.Item>
-      ))}
-      <Menu.Item>
-        <div onClick={() => setYear("overall")}>Overall</div>
-      </Menu.Item>
-    </Menu>
-  );
-  return (
-    <Dropdown overlay={menu}>
-      <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-        Select Year <DownOutlined />
-      </a>
-    </Dropdown>
-  );
-};
 
 export default App;
