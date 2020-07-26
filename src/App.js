@@ -1,46 +1,38 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
-import * as d3 from "d3";
-import { initiateForce } from "./data-vis/forceLayout.js";
-import useChartDimensions from "./hooks/useChartDimensions.js";
+import _ from "lodash";
+import Force from "./data-vis/Force.jsx";
+import videos from "./data/videos.json";
+import { Scrollama, Step } from "react-scrollama";
 
 function App() {
-  const [ref, dms] = useChartDimensions({});
+  const startYear = 2014;
+  const endYear = 2020;
+  const [currentYear, setCurrentYear] = useState(startYear);
 
-  const [nodes, setNodes] = useState(null);
+  const nodes = videos[currentYear] ? videos[currentYear].slice(0, 50) : null;
+  console.log(currentYear, nodes);
 
-  useEffect(() => {
-    setNodes(generateData());
-  }, []);
-
-  const generateData = () => {
-    const numNodes = 100;
-    const nodes = d3.range(numNodes).map((d) => {
-      return {
-        id: Math.floor(Math.random() * 10000),
-        radius: Math.random() * 25,
-        category: Math.floor(Math.random() * 3),
-      };
-    });
-    return nodes;
+  const onStepEnter = ({ data }) => {
+    setCurrentYear(data);
   };
-
-  useEffect(() => {
-    if (nodes !== null && nodes.length) {
-      initiateForce({
-        nodes,
-        width: dms.boundedWidth,
-        height: dms.boundedHeight,
-      });
-    }
-  }, [dms]);
 
   return (
     <div className="App">
-      <div id="wrapper" ref={ref} style={{ height: "90vh" }}>
-        <svg height={dms.boundedHeight} width={dms.boundedWidth} />
-      </div>
-      <button onClick={() => setNodes(generateData())}>new data</button>
+      <Force nodes={nodes} year={currentYear} />
+      <Scrollama onStepEnter={onStepEnter} debug>
+        {_.range(startYear, endYear + 1).map((year, stepIndex) => (
+          <Step data={year} key={stepIndex}>
+            <div
+              style={{
+                margin: "70vh 0",
+              }}
+            >
+              <h1>{year}</h1>
+            </div>
+          </Step>
+        ))}
+      </Scrollama>
     </div>
   );
 }
