@@ -21,7 +21,9 @@ const data = d3.csvParse(fs.readFileSync("./cleaned.csv", "utf-8"));
 const years = _.range(2014, 2021);
 
 const result = {};
+const categories = {};
 _.forEach(years, (year) => {
+  const thisYearCategories = new Set();
   const videosForThisYear = data.filter((d) => {
     const date = new Date(d.timestamp);
     return (
@@ -61,22 +63,32 @@ _.forEach(years, (year) => {
 
   const radiusScale = d3
     .scaleLinear()
-    .domain([1, videoCounts[sortedVideos[0]]])
+    .domain([1, sortedVideos[0].count])
     .range([5, 25]);
 
   result[year] = sortedVideos.map((v) => {
     let category = "";
     if (topChannels.includes(v.channelName)) {
       category = v.channelName;
+      thisYearCategories.add(v.channelName);
     } else {
       category = "other";
+      thisYearCategories.add("other");
     }
     return {
-      id: v,
-      radius: radiusScale(videoCounts[v]),
+      id: v.title,
+      radius: radiusScale(v.count),
       category,
     };
   });
+  categories[year] = Array.from(thisYearCategories);
 });
 
+// console.log(result);
+
 fs.writeFileSync("../src/data/videos.json", JSON.stringify(result), "utf8");
+fs.writeFileSync(
+  "../src/data/categories.json",
+  JSON.stringify(categories),
+  "utf8"
+);

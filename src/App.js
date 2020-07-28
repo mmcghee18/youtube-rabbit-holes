@@ -10,8 +10,7 @@ function App() {
   const endYear = 2020;
   const [currentYear, setCurrentYear] = useState(startYear);
 
-  const nodes = videos[currentYear] ? videos[currentYear].slice(0, 50) : null;
-  console.log(currentYear, nodes);
+  const nodes = videos[currentYear] ? videos[currentYear] : null;
 
   const onStepEnter = ({ data }) => {
     setCurrentYear(data);
@@ -19,7 +18,7 @@ function App() {
 
   return (
     <div className="App">
-      <Force nodes={nodes} year={currentYear} />
+      {/* <Force nodes={nodes} year={currentYear} />
       <Scrollama onStepEnter={onStepEnter} debug>
         {_.range(startYear, endYear + 1).map((year, stepIndex) => (
           <Step data={year} key={stepIndex}>
@@ -32,7 +31,7 @@ function App() {
             </div>
           </Step>
         ))}
-      </Scrollama>
+      </Scrollama> */}
     </div>
   );
 }
