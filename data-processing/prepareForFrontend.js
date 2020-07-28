@@ -10,20 +10,11 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-// each video should become -> {id, radius, category}
-// - id will be video title
-// - radius will be a function of views of that video in that year
-// - category: if its channel is in the top 50%, category = channel
-// otherwise, if a word in the title is in the top 50%, category = word
-// rest are in a category "other"
-
 const data = d3.csvParse(fs.readFileSync("./cleaned.csv", "utf-8"));
 const years = _.range(2014, 2021);
 
 const result = {};
-const categories = {};
 _.forEach(years, (year) => {
-  const thisYearCategories = new Set();
   const videosForThisYear = data.filter((d) => {
     const date = new Date(d.timestamp);
     return (
@@ -32,22 +23,6 @@ _.forEach(years, (year) => {
       d.channelName !== "Ashlea Birthday"
     );
   });
-
-  const videoCounts = _.countBy(videosForThisYear, (v) => v.title);
-  const sortedVideos = _.map(
-    _.orderBy(_.keys(videoCounts), (d) => videoCounts[d], "desc"),
-    (title) => {
-      const findChannel = _.find(
-        videosForThisYear,
-        _.matchesProperty("title", title)
-      );
-      return {
-        title,
-        count: videoCounts[title],
-        channelName: findChannel.channelName,
-      };
-    }
-  );
 
   const channelCounts = _.countBy(videosForThisYear, (v) => v.channelName);
   const sortedChannels = _.orderBy(
@@ -61,34 +36,43 @@ _.forEach(years, (year) => {
     sortedChannels.length * channelThreshold
   );
 
+  const videoCounts = _.countBy(videosForThisYear, (v) => v.title);
+  const sortedVideos = _.map(
+    _.orderBy(_.keys(videoCounts), (d) => videoCounts[d], "desc"),
+    (title) => {
+      const findChannel = _.find(
+        videosForThisYear,
+        _.matchesProperty("title", title)
+      );
+      return {
+        title,
+        views: videoCounts[title],
+        channelName: findChannel.channelName,
+      };
+    }
+  );
+
   const radiusScale = d3
     .scaleLinear()
-    .domain([1, sortedVideos[0].count])
+    .domain([1, channelCounts[topChannels[0]]])
     .range([5, 25]);
 
-  result[year] = sortedVideos.map((v) => {
-    let category = "";
-    if (topChannels.includes(v.channelName)) {
-      category = v.channelName;
-      thisYearCategories.add(v.channelName);
-    } else {
-      category = "other";
-      thisYearCategories.add("other");
-    }
+  const categories = topChannels.map((channel) => {
+    const videosInCategory = sortedVideos
+      .filter((v) => v.channelName === channel)
+      .map(({ title, views }) => ({ title, views }));
     return {
-      id: v.title,
-      radius: radiusScale(v.count),
-      category,
+      category: channel,
+      videos: videosInCategory,
+      raidus: radiusScale(videosInCategory.length),
     };
   });
-  categories[year] = Array.from(thisYearCategories);
+  result[year] = categories;
 });
 
-// console.log(result);
-
-fs.writeFileSync("../src/data/videos.json", JSON.stringify(result), "utf8");
 fs.writeFileSync(
-  "../src/data/categories.json",
-  JSON.stringify(categories),
+  "../essay/src/data/categories.json",
+  JSON.stringify(result),
   "utf8"
 );
+console.log("done!");
