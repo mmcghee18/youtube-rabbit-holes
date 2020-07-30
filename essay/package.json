@@ -1,6 +1,6 @@
 {
-  "name": "starter-project",
-  "homepage": "http://mmcghee18.github.io/starter-project",
+  "name": "youtube-map",
+  "homepage": "http://mmcghee18.github.io/youtube-map",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
