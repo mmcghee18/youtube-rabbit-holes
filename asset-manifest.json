@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/youtube-map/static/css/main.5f361e03.chunk.css",
-    "main.js": "/youtube-map/static/js/main.c833cbcf.chunk.js",
-    "main.js.map": "/youtube-map/static/js/main.c833cbcf.chunk.js.map",
-    "runtime-main.js": "/youtube-map/static/js/runtime-main.c9549c1e.js",
-    "runtime-main.js.map": "/youtube-map/static/js/runtime-main.c9549c1e.js.map",
-    "static/js/2.4657065c.chunk.js": "/youtube-map/static/js/2.4657065c.chunk.js",
-    "static/js/2.4657065c.chunk.js.map": "/youtube-map/static/js/2.4657065c.chunk.js.map",
-    "index.html": "/youtube-map/index.html",
-    "precache-manifest.29f9a486e991a5bd9c76041c9d06dab0.js": "/youtube-map/precache-manifest.29f9a486e991a5bd9c76041c9d06dab0.js",
-    "service-worker.js": "/youtube-map/service-worker.js",
-    "static/css/main.5f361e03.chunk.css.map": "/youtube-map/static/css/main.5f361e03.chunk.css.map",
-    "static/js/2.4657065c.chunk.js.LICENSE.txt": "/youtube-map/static/js/2.4657065c.chunk.js.LICENSE.txt"
+    "main.css": "/youtube-rabbit-holes/static/css/main.5f361e03.chunk.css",
+    "main.js": "/youtube-rabbit-holes/static/js/main.c833cbcf.chunk.js",
+    "main.js.map": "/youtube-rabbit-holes/static/js/main.c833cbcf.chunk.js.map",
+    "runtime-main.js": "/youtube-rabbit-holes/static/js/runtime-main.2f1f88af.js",
+    "runtime-main.js.map": "/youtube-rabbit-holes/static/js/runtime-main.2f1f88af.js.map",
+    "static/js/2.4657065c.chunk.js": "/youtube-rabbit-holes/static/js/2.4657065c.chunk.js",
+    "static/js/2.4657065c.chunk.js.map": "/youtube-rabbit-holes/static/js/2.4657065c.chunk.js.map",
+    "index.html": "/youtube-rabbit-holes/index.html",
+    "precache-manifest.0b74bfbb532e884d8f108b6ee8afeb13.js": "/youtube-rabbit-holes/precache-manifest.0b74bfbb532e884d8f108b6ee8afeb13.js",
+    "service-worker.js": "/youtube-rabbit-holes/service-worker.js",
+    "static/css/main.5f361e03.chunk.css.map": "/youtube-rabbit-holes/static/css/main.5f361e03.chunk.css.map",
+    "static/js/2.4657065c.chunk.js.LICENSE.txt": "/youtube-rabbit-holes/static/js/2.4657065c.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.c9549c1e.js",
+    "static/js/runtime-main.2f1f88af.js",
     "static/js/2.4657065c.chunk.js",
     "static/css/main.5f361e03.chunk.css",
     "static/js/main.c833cbcf.chunk.js"
